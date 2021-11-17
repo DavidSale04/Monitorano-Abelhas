@@ -1,27 +1,28 @@
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <MicroLCD.h>
 #include <Ultrasonic.h> 
 #include "DHT.h"
 
-#define ldr A0
 
+#define ldr A0
 
 DHT dht1(A1, DHT11);
 DHT dht2(A2, DHT11);
 
-HC_SR04 sensor1(12,13); //(Trigger,Echo)
+HC_SR04 sensor1(6,5); //(Trigger,Echo)
 
 LCD_SSD1306 lcd; /* para módulo contralado pelo CI SSD1306 OLED */
 
-
+int timer = 0;
 float h1 = 0; 
 float t1 = 0;
 float h2 = 0; 
 float t2 = 0;
 
 //Variaveis de média:
-
+int pinoSS = 10;
 float divisor = 0;
 float somaumidade1 = 0;
 float somatemperatura1= 0;
@@ -33,13 +34,15 @@ float mediaumidade2= 0;
 float mediatemperatura2=0;
 
 void setup() { 
+
+    
   pinMode(ldr, INPUT);
   pinMode(2, INPUT);
+  pinMode(pinoSS, OUTPUT);
   Serial.begin(9600); 
   dht1.begin();
   dht2.begin();
   lcd.begin();
-
 }
 
 void loop() {
@@ -90,7 +93,8 @@ Serial.print(" Distância  ");
 Serial.print(sensor1.distance());  
 Serial.print(" cm       ");
 Serial.print(" Luz:  ");
-Serial.println(analogRead(ldr));
+Serial.print(analogRead(ldr));
+Serial.println("         ");
 
    lcd.clear();
   lcd.setCursor(15, 0);
@@ -158,6 +162,6 @@ Serial.println(analogRead(ldr));
   lcd.print("l");
   
 
-delay(10000);
+delay(2000);
   }
   
